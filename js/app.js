@@ -2,10 +2,11 @@
 const modal = document.querySelector('#modal');
 const content = document.querySelector('#content');
 const backdrop = document.querySelector('#backdrop');
+const progress = document.querySelector('#progress');
 //create array cards
 const technologies = [
-	{ title: 'HTML', description: 'HTML Text', type: 'html', done: false },
-	{ title: 'CSS', description: 'CSS Text', type: 'css', done: false },
+	{ title: 'HTML', description: 'HTML Text', type: 'html', done: true },
+	{ title: 'CSS', description: 'CSS Text', type: 'css', done: true },
 	{ title: 'JavaScript', description: 'JavaScript Text', type: 'js', done: false },
 	{ title: 'Git', description: 'Git Text', type: 'git', done: false },
 	{ title: 'React', description: 'React Text', type: 'react', done: false }
@@ -24,8 +25,47 @@ function closeModal() {
 	modal.classList.remove('open');
 }
 
-//function start app
 function init() {
+	renderCards()
+	renderProgress()
+}
+
+function renderProgress() {
+	const percent = computeProgressPercent()
+
+	//color progress
+	let background
+	if (percent <= 30) {
+		background = '#E75A5A'
+	} else if (percent > 30 && percent < 70) {
+		background = '#F99415'
+	} else {
+		background = '#73BA3C'
+	}
+
+	//style & text progress
+	progress.style.background = background
+	progress.style.width = percent + '%'
+	progress.textContent = percent ? percent + '%' : ''
+
+}
+
+//calc %
+function computeProgressPercent() {
+	if (technologies.length === 0) {
+		return 0
+	}
+
+	let doneCount = 0
+	for (let i = 0; i < technologies.length; i++) {
+		if (technologies[i].done) doneCount++
+	}
+
+	return Math.round((100 * doneCount) / technologies.length)
+}
+
+//generate cards
+function renderCards() {
 	//Add text, if hasn't tech
 	if (technologies.length === 0) {
 		content.innerHTML = '<p class="empty">Технологий пока нет. Добавьте первую</p>'
