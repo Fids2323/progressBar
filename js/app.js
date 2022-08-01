@@ -139,6 +139,10 @@ function toCard(tech) {
 	`
 }
 
+function isInvalid(title, description) {
+	return !title.value || !description.value
+}
+
 function createTech(event) {
 	//cancel reload
 	event.preventDefault()
@@ -149,6 +153,19 @@ function createTech(event) {
 
 	//destructuring
 	const { title, description } = event.target
+
+	//validation form
+	if (isInvalid(title, description)) {
+		if (!title.value) title.classList.add('invalid')
+		if (!description.value) description.classList.add('invalid')
+
+		//delete class by restart animation 2s
+		setTimeout(() => {
+			title.classList.remove('invalid')
+			description.classList.remove('invalid')
+		}, 2000)
+		return
+	}
 
 	const newTech = {
 		title: title.value,
