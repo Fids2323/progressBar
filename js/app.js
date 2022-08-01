@@ -3,6 +3,7 @@ const modal = document.querySelector('#modal');
 const content = document.querySelector('#content');
 const backdrop = document.querySelector('#backdrop');
 const progress = document.querySelector('#progress');
+const form = document.querySelector('#form');
 //create array cards
 const technologies = [
 	{ title: 'HTML', description: 'HTML Text', type: 'html', done: true },
@@ -15,7 +16,10 @@ const technologies = [
 //add Eventlistener to modalWindow
 content.addEventListener('click', openCard);
 backdrop.addEventListener('click', closeModal);
-modal.addEventListener('change', toggleTech)
+modal.addEventListener('change', toggleTech);
+form.addEventListener('submit', createTech);
+
+
 
 const APP_TITLE = document.title;
 
@@ -134,4 +138,30 @@ function toCard(tech) {
 	</div>
 	`
 }
+
+function createTech(event) {
+	//cancel reload
+	event.preventDefault()
+
+	//access labels
+	//const title = event.target.title
+	//const description = event.target.description
+
+	//destructuring
+	const { title, description } = event.target
+
+	const newTech = {
+		title: title.value,
+		description: description.value,
+		done: false,
+		type: title.value.toLowerCase()
+	}
+	//add to the end of the array
+	technologies.push(newTech);
+	//clear inputs
+	title.value = '';
+	description.value = '';
+	init();
+}
+
 init()
