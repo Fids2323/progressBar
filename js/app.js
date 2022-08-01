@@ -4,14 +4,8 @@ const content = document.querySelector('#content');
 const backdrop = document.querySelector('#backdrop');
 const progress = document.querySelector('#progress');
 const form = document.querySelector('#form');
-//create array cards
-const technologies = [
-	{ title: 'HTML', description: 'HTML Text', type: 'html', done: true },
-	{ title: 'CSS', description: 'CSS Text', type: 'css', done: true },
-	{ title: 'JavaScript', description: 'JavaScript Text', type: 'js', done: false },
-	{ title: 'Git', description: 'Git Text', type: 'git', done: false },
-	{ title: 'React', description: 'React Text', type: 'react', done: false }
-]
+//create array cards(state from localStorage)
+const technologies = getState();
 
 //add Eventlistener to modalWindow
 content.addEventListener('click', openCard);
@@ -22,6 +16,7 @@ form.addEventListener('submit', createTech);
 
 
 const APP_TITLE = document.title;
+const LS_KEY = 'MY_TECHS';
 
 //modal
 function openCard() {
@@ -51,6 +46,7 @@ function toggleTech(event) {
 	const tech = technologies.find(t => t.type === type)
 	tech.done = event.target.checked
 
+	saveState()
 	init()
 }
 
@@ -178,7 +174,18 @@ function createTech(event) {
 	//clear inputs
 	title.value = '';
 	description.value = '';
+	saveState()
 	init();
+}
+
+//localStorage
+function saveState() {
+	localStorage.setItem(LS_KEY, JSON.stringify(technologies))
+}
+
+function getState() {
+	const raw = localStorage.getItem(LS_KEY)
+	return raw ? JSON.parse(raw) : []
 }
 
 init()
